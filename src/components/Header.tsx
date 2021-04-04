@@ -3,31 +3,31 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import {Button} from "@material-ui/core";
+import {Button, Grid, IconButton} from "@material-ui/core";
 import {useCookies} from "react-cookie";
 import {useHistory} from "react-router-dom";
 import {routes} from "../helpers/routes";
+import AppsIcon from "@material-ui/icons/Apps";
+import ViewListIcon from "@material-ui/icons/ViewList";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             flexGrow: 1,
-            color:'#fff'
         },
         title: {
-            flexGrow: 1,
-            color: '#fff',
-            cursor: "pointer"
+            cursor: "pointer",
+            marginRight: theme.spacing(2)
         },
         img:{
             width: theme.spacing(5),
             height: theme.spacing(5),
             marginRight: theme.spacing(1),
-            color: '#fff'
         },
-        logout:{
-            color: '#fff'
-        }
+        icon: {
+            width: 30,
+            height: 30,
+        },
     }),
 );
 
@@ -40,20 +40,25 @@ export default function Header() {
         removeCookie('user')
     }
 
-    const goToHome = () => {
-        history.push(routes.notes)
-    }
-
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" className={classes.title} onClick={goToHome}>
-                    {'some text'.toUpperCase()}
+                <Typography variant="h6" className={classes.title} onClick={() => history.push(routes.notes)}>
+                    ULTRA TODO
                 </Typography>
 
-                <Button className={classes.logout} onClick={logout}>
-                    ВЫЙТИ
+                <Button onClick={logout}>
+                    АКТИВНЫЕ
                 </Button>
+                <Button onClick={logout}>
+                    ЗАВЕРШЕННЫЕ
+                </Button>
+                <IconButton>
+                    <AppsIcon className={classes.icon}/>
+                </IconButton>
+                <IconButton >
+                    <ViewListIcon className={classes.icon}/>
+                </IconButton>
             </Toolbar>
         </AppBar>
     );
