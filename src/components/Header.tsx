@@ -17,12 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         title: {
             cursor: "pointer",
-            marginRight: theme.spacing(2)
-        },
-        img:{
-            width: theme.spacing(5),
-            height: theme.spacing(5),
-            marginRight: theme.spacing(1),
+            marginRight: theme.spacing(2),
         },
         icon: {
             width: 30,
@@ -46,12 +41,11 @@ export default function Header() {
                 <Typography variant="h6" className={classes.title} onClick={() => history.push(routes.notes)}>
                     ULTRA TODO
                 </Typography>
-
                 <Button onClick={logout}>
                     АКТИВНЫЕ
                 </Button>
                 <Button onClick={logout}>
-                    ЗАВЕРШЕННЫЕ
+                    ГОТОВЫЕ
                 </Button>
                 <IconButton>
                     <AppsIcon className={classes.icon}/>

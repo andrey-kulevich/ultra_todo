@@ -1,8 +1,9 @@
 import {PageContainer} from "../containers/PageContainer";
-import {FormControl, Grid, Icon, IconButton, InputLabel, MenuItem, Select, Typography} from "@material-ui/core";
+import {FormControl, Grid, InputLabel, MenuItem, Select, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import {useHttp} from "../hooks/useHttp";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {Todo} from "../components/Todo";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         title: {
             marginRight: theme.spacing(3),
-            paddingTop: theme.spacing(1)
+            paddingTop: theme.spacing(1),
         }
     }),
 );
@@ -34,8 +35,8 @@ export const NotesPage = () => {
         <PageContainer>
             <Grid container direction={"row"}>
                 <Typography variant={"h5"} className={classes.title}>Активные задачи</Typography>
-                <FormControl variant={'outlined'} className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-outlined-label">Задачи</InputLabel>
+                <FormControl className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-outlined-label">Период</InputLabel>
                     <Select
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
@@ -50,6 +51,7 @@ export const NotesPage = () => {
                     </Select>
                 </FormControl>
             </Grid>
+            <Todo />
         </PageContainer>
     )
 }
