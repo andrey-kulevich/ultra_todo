@@ -1,4 +1,4 @@
 export const routes = {
-    notes: '/notes',
-    dashboard: '/dashboard'
+    activeTodos: '/active',
+    doneTodos: '/done'
 }

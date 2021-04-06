@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -8,10 +8,15 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import {TodoInterface} from "../interfaces/TodoInterface";
+import {useTodos} from "../context/TodosContext";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
+            "&:hover": {
+                backgroundColor: '#f3f3f3',
+                transition: 'background-color 0.5s'
+            },
             minWidth: 275,
             marginTop: theme.spacing(3)
         },
@@ -27,17 +32,20 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export const Todo = ({todo} : {todo: TodoInterface}) => {
+export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
     const classes = useStyles();
+    const {todos} = useTodos()
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    useEffect(() => {
+
+    },[todos])
+
 
     return (
         <>
-            <Card className={classes.root} variant="outlined">
+            <Card className={classes.root} variant="outlined" draggable={"true"}>
                 <CardHeader
                     action={
                         <>
@@ -57,19 +65,12 @@ export const Todo = ({todo} : {todo: TodoInterface}) => {
                             </IconButton>
                         </>
                     }
-                    title="Название заметки очень сложное ялялял"
-                    subheader="September 14, 2016"
+                    title={todo.title}
+                    subheader={todo.lastModifiedDate}
                 />
                 <CardContent>
                     <hr className={classes.line}/>
-                    <Typography variant="body2" component="p">
-                        Значимость этих проблем настолько очевидна, что начало повседневной работы по формированию позиции
-                        обеспечивает широкому кругу (специалистов) участие в формировании форм развития.
-                        Равным образом новая модель организационной деятельности в значительной степени
-                        обуславливает создание существенных финансовых и административных условий.
-                        Значимость этих проблем настолько очевидна, что укрепление и развитие структуры
-                        влечет за собой процесс внедрения и модернизации системы обучения кадров, соответствует насущным потребностям.
-                    </Typography>
+                    <Typography variant="body2" component="p"> {todo.content} </Typography>
                 </CardContent>
             </Card>
             <Menu
@@ -77,10 +78,10 @@ export const Todo = ({todo} : {todo: TodoInterface}) => {
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
-                onClose={handleClose}
+                onClose={() => setAnchorEl(null)}
             >
-                <MenuItem onClick={handleClose}>Изменить</MenuItem>
-                <MenuItem onClick={handleClose}>Цвет</MenuItem>
+                <MenuItem onClick={() => setAnchorEl(null)}>Изменить</MenuItem>
+                <MenuItem onClick={() => setAnchorEl(null)}>Цвет</MenuItem>
             </Menu>
         </>
     );
