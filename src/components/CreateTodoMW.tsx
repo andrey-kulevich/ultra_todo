@@ -8,6 +8,7 @@ import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
 import {FormControl, TextField} from "@material-ui/core";
 import {TodoInterface} from "../interfaces/TodoInterface";
+import useSnackBar from "../hooks/useSnackbar";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children?: React.ReactElement<any, any> },
@@ -24,19 +25,25 @@ const getCurrentDate = () : string => {
 
 export const CreateTodoMW = ({open, onClose, createTodo} :
                                  {open: boolean, onClose: any, createTodo: any}) => {
+    const {snack, openSnack} = useSnackBar()
+
     const [title, setTitle] = useState<string>('')
     const [content, setContent] = useState<string>('')
     const [notificationDate, setNotificationDate] = useState<string>(getCurrentDate())
 
     const handleCreate = () => {
-        createTodo({
-            title: title,
-            content: content,
-            lastModifiedDate: getCurrentDate(),
-            notificationDate: notificationDate,
-            isDone: false
-        } as TodoInterface)
-        onClose()
+        if (title === '') {
+            openSnack('error', 'Пожалуйста, введите заголовок задачи')
+        } else {
+            createTodo({
+                title: title,
+                content: content,
+                lastModifiedDate: getCurrentDate(),
+                notificationDate: notificationDate,
+                isDone: false
+            } as TodoInterface)
+            onClose()
+        }
     }
 
     return (
@@ -53,6 +60,7 @@ export const CreateTodoMW = ({open, onClose, createTodo} :
             <DialogContent>
                 <FormControl fullWidth>
                     <TextField
+                        required
                         fullWidth
                         id="titleField"
                         label="Заголовок"
@@ -89,6 +97,9 @@ export const CreateTodoMW = ({open, onClose, createTodo} :
                     Добавить
                 </Button>
             </DialogActions>
+
+            {snack}
+
         </Dialog>
     );
 }

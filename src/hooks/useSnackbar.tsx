@@ -12,11 +12,8 @@ export default function useSnackBar() {
     const [severity, setSeverity] = React.useState<"success" | "error" | "warning" | "info">("success" )
 
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
+        if (reason === 'clickaway') return
+        setOpen(false)
     };
 
     const openSnack = useCallback((customSeverity:"success" | "error" | "warning" | "info",

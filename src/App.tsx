@@ -42,9 +42,11 @@ export default function App() {
     }
 
     const removeTodo = (index : number) => {
-        let updated = todos
-        if (updated) updated.splice(index, 1)
-        setTodos(updated)
+        // let updated = todos
+        // if (updated) updated.splice(index, 1)
+        // setTodos(updated)
+
+        todos.splice(index, 1)
 
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
         oldTodos.splice(index, 1)

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
     const classes = useStyles();
-    const {todos} = useTodos()
+    const {todos, updateTodo, removeTodo} = useTodos()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -60,7 +60,7 @@ export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
                             >
                                 <MoreVertIcon />
                             </IconButton>
-                            <IconButton aria-label="settings">
+                            <IconButton aria-label="settings" onClick={() => removeTodo(index)}>
                                 <DeleteIcon />
                             </IconButton>
                         </>
@@ -70,7 +70,9 @@ export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
                 />
                 <CardContent>
                     <hr className={classes.line}/>
-                    <Typography variant="body2" component="p"> {todo.content} </Typography>
+                    {todo.content.split('\n').map((elem, index) => (
+                        <Typography  variant="body2" component="p" key={index}>{elem}</Typography>
+                    ))}
                 </CardContent>
             </Card>
             <Menu

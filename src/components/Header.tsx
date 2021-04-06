@@ -36,7 +36,7 @@ export default function Header() {
     const {display, switchDisplay, setNewTodos} = useTodos()
 
     useEffect(() => {
-        console.log('alaala')
+
     },[display])
 
     const getDataFromFile = (event : ChangeEvent<HTMLInputElement>) => {
