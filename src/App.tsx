@@ -35,18 +35,20 @@ export default function App() {
     }
 
     const addTodo = (todo : TodoInterface) => {
-        todos.push(todo)
+        setTodos((todos) => {
+            todos.unshift(todo)
+            return todos
+        })
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
-        oldTodos.push(todo)
+        oldTodos.unshift(todo)
         localStorage.setItem('todos', JSON.stringify(oldTodos))
     }
 
     const removeTodo = (index : number) => {
-        // let updated = todos
-        // if (updated) updated.splice(index, 1)
-        // setTodos(updated)
-
-        todos.splice(index, 1)
+        setTodos((todos) => {
+            todos.splice(index, 1)
+            return todos
+        })
 
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
         oldTodos.splice(index, 1)
@@ -59,19 +61,33 @@ export default function App() {
     }
 
     const updateTodo = (index : number, todo : TodoInterface) => {
-        let updated = todos
-        if (updated) updated[index] = todo
-        setTodos(updated)
+        setTodos((todos) => {
+            todos[index] = todo
+            return todos
+        })
 
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
         oldTodos[index] = todo
         localStorage.setItem('todos', JSON.stringify(oldTodos))
     }
 
+    const markTodoAsDone = (index: number) => {
+        setTodos((todos) => {
+            todos[index].isDone = true
+            return todos
+        })
+
+        let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
+        oldTodos[index].isDone = true
+        localStorage.setItem('todos', JSON.stringify(oldTodos))
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <Router>
-                <TodosProvider value={{todos, display, switchDisplay, addTodo, removeTodo, setNewTodos, updateTodo}}>
+                <TodosProvider value={{
+                    todos, display, switchDisplay, addTodo,
+                    removeTodo, setNewTodos, updateTodo, markTodoAsDone}}>
                     {routes}
                 </TodosProvider>
           </Router>

@@ -6,7 +6,7 @@ export const PageContainer = ({children} : {children:any}) => {
     return(
         <>
             <Header/>
-            <Container style={{paddingTop: '1em'}}>
+            <Container style={{paddingTop: '1em', paddingBottom: '1em'}}>
                 {children}
             </Container>
         </>

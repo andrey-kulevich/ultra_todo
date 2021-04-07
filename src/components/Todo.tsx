@@ -3,22 +3,27 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import {CardHeader, IconButton, Menu, MenuItem} from "@material-ui/core";
+import {CardActions, CardHeader, IconButton, Menu, MenuItem, Button, TextField} from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import {TodoInterface} from "../interfaces/TodoInterface";
 import {useTodos} from "../context/TodosContext";
+import {getCurrentDate} from "../helpers/utils";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             "&:hover": {
                 backgroundColor: '#f3f3f3',
-                transition: 'background-color 0.5s'
+                borderRadius: '15px',
+                transition: 'background-color 0.5s, border-radius 0.7s'
             },
             minWidth: 275,
-            marginTop: theme.spacing(3)
+            marginTop: theme.spacing(3),
+            backgroundColor: '#fff',
+            borderRadius: '5px',
+            transition: 'background-color 0.5s, border-radius 0.7s'
         },
         title: {
             fontSize: 14,
@@ -27,53 +32,119 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: 12,
         },
         line: {
-            color: 'rgba(0, 0, 0, 0.2)'
+            height: '1px',
+            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+            border: 'none'
+        },
+        content: {
+            paddingTop: 0
+        },
+        header: {
+            paddingBottom: 0
         }
     })
 );
 
 export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
     const classes = useStyles();
-    const {todos, updateTodo, removeTodo} = useTodos()
+    const {todos, updateTodo, removeTodo, markTodoAsDone} = useTodos()
 
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const [edit, setEdit] = useState<boolean>(false)
+    const [title, setTitle] = useState<string>(todo.title)
+    const [content, setContent] = useState<string>(todo.content)
 
     useEffect(() => {
 
     },[todos])
 
+    const handleEdit = () => {
+        setEdit(true)
+        setAnchorEl(null)
+    }
+
+    const handleSave = () => {
+        if (title !== todo.title && content !== todo.content) {
+            updateTodo(index, {
+                title: title,
+                content: content,
+                lastModifiedDate: getCurrentDate(),
+                notificationDate: todo.notificationDate,
+                isDone: false
+            } as TodoInterface)
+        }
+        setEdit(false)
+    }
 
     return (
         <>
             <Card className={classes.root} variant="outlined" draggable={"true"}>
                 <CardHeader
+                    className={classes.header}
                     action={
                         <>
-                            <IconButton aria-label="settings">
-                                <DoneIcon />
-                            </IconButton>
-                            <IconButton
-                                aria-label="settings"
-                                aria-controls="settings-menu"
-                                onClick={(e) =>
-                                    setAnchorEl(e.currentTarget)}
-                            >
-                                <MoreVertIcon />
-                            </IconButton>
+                            {!todo.isDone &&
+                                <>
+                                    <IconButton aria-label="settings" onClick={() => markTodoAsDone(index)}>
+                                        <DoneIcon />
+                                    </IconButton>
+                                    <IconButton
+                                        aria-label="settings"
+                                        aria-controls="settings-menu"
+                                        onClick={(e) =>
+                                            setAnchorEl(e.currentTarget)}
+                                    >
+                                        <MoreVertIcon />
+                                    </IconButton>
+                                </>
+                            }
                             <IconButton aria-label="settings" onClick={() => removeTodo(index)}>
                                 <DeleteIcon />
                             </IconButton>
                         </>
                     }
-                    title={todo.title}
-                    subheader={todo.lastModifiedDate}
+                    title={edit ?
+                        <>
+                            <TextField
+                                fullWidth
+                                id="titleField"
+                                label="Заголовок"
+                                value={title}
+                                onChange={(e) =>
+                                    setTitle(e.target.value)}
+                            />
+                        </>
+                        : todo.title}
+                    subheader={!edit && todo.lastModifiedDate}
                 />
-                <CardContent>
-                    <hr className={classes.line}/>
-                    {todo.content.split('\n').map((elem, index) => (
-                        <Typography  variant="body2" component="p" key={index}>{elem}</Typography>
-                    ))}
+                <CardContent className={classes.content}>
+                    {edit ?
+                        <TextField
+                            fullWidth
+                            multiline
+                            id="contentField"
+                            label="Описание"
+                            value={content}
+                            onChange={(e) =>
+                                setContent(e.target.value)}
+                        />
+                        :
+                        todo.content &&
+                        <>
+                            <hr className={classes.line} />
+                            {todo.content.split('\n').map((elem, index) => (
+                                <Typography  variant="body2" component="p" key={index}>{elem}</Typography>
+                            ))}
+                        </>
+                    }
+
                 </CardContent>
+                {edit &&
+                    <CardActions>
+                        <Button onClick={handleSave}>Сохранить</Button>
+                        <Button onClick={() => setEdit(false)}>Отмена</Button>
+                    </CardActions>
+                }
             </Card>
             <Menu
                 id="settings-menu"
@@ -82,7 +153,7 @@ export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
             >
-                <MenuItem onClick={() => setAnchorEl(null)}>Изменить</MenuItem>
+                <MenuItem onClick={handleEdit}>Изменить</MenuItem>
                 <MenuItem onClick={() => setAnchorEl(null)}>Цвет</MenuItem>
             </Menu>
         </>

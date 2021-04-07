@@ -9,6 +9,7 @@ import { TransitionProps } from '@material-ui/core/transitions';
 import {FormControl, TextField} from "@material-ui/core";
 import {TodoInterface} from "../interfaces/TodoInterface";
 import useSnackBar from "../hooks/useSnackbar";
+import {getCurrentDate} from "../helpers/utils";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children?: React.ReactElement<any, any> },
@@ -16,12 +17,6 @@ const Transition = React.forwardRef(function Transition(
 ) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-
-const getCurrentDate = () : string => {
-    return new Date().getFullYear() + '-' +
-        (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' +
-        new Date().getDate().toString().padStart(2, '0')
-}
 
 export const CreateTodoMW = ({open, onClose, createTodo} :
                                  {open: boolean, onClose: any, createTodo: any}) => {
