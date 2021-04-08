@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const TodosPage = () => {
     const classes = useStyles();
-    const {todos, addTodo} = useTodos()
+    const {todos} = useTodos()
     const [view, setView] = useState<number>(1)
     const [open, setOpen] = useState(false)
 
@@ -76,7 +76,7 @@ export const TodosPage = () => {
                         todos.filter(elem => !elem.isDone && elem.lastModifiedDate.split('-')[1] ===
                             (new Date().getMonth() + 1).toString().padStart(2, '0')))
                     .map((elem, index) => (
-                        <Todo key={index} todo={elem} index={index}/>
+                        <Todo key={index} todo={elem}/>
                     ))
                 :
                 <Typography variant={"h5"} align={'center'} className={classes.noTodosMessage}>
@@ -84,7 +84,7 @@ export const TodosPage = () => {
                 </Typography>
             }
 
-            <CreateTodoMW open={open} onClose={() => setOpen(false)} createTodo={addTodo}/>
+            <CreateTodoMW open={open} onClose={() => setOpen(false)}/>
         </PageContainer>
     )
 }

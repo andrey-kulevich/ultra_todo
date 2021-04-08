@@ -44,14 +44,14 @@ export default function App() {
         localStorage.setItem('todos', JSON.stringify(oldTodos))
     }
 
-    const removeTodo = (index : number) => {
+    const removeTodo = (id : number) => {
         setTodos((todos) => {
-            todos.splice(index, 1)
+            todos.splice(todos.findIndex(elem => elem.id === id), 1)
             return todos
         })
 
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
-        oldTodos.splice(index, 1)
+        oldTodos.splice(todos.findIndex(elem => elem.id === id), 1)
         localStorage.setItem('todos', JSON.stringify(oldTodos))
     }
 
@@ -60,25 +60,27 @@ export default function App() {
         localStorage.setItem('todos', JSON.stringify(newTodos))
     }
 
-    const updateTodo = (index : number, todo : TodoInterface) => {
+    const updateTodo = (id : number, todo : TodoInterface) => {
         setTodos((todos) => {
-            todos[index] = todo
+            todos.splice(todos.findIndex(elem => elem.id === id), 1)
+            todos.unshift(todo)
             return todos
         })
 
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
-        oldTodos[index] = todo
+        oldTodos.splice(todos.findIndex(elem => elem.id === id), 1)
+        oldTodos.unshift(todo)
         localStorage.setItem('todos', JSON.stringify(oldTodos))
     }
 
-    const markTodoAsDone = (index: number) => {
+    const markTodoAsDone = (id: number) => {
         setTodos((todos) => {
-            todos[index].isDone = true
+            todos[todos.findIndex(elem => elem.id === id)].isDone = true
             return todos
         })
 
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
-        oldTodos[index].isDone = true
+        oldTodos[todos.findIndex(elem => elem.id === id)].isDone = true
         localStorage.setItem('todos', JSON.stringify(oldTodos))
     }
 

@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
+export const Todo = ({todo} : {todo: TodoInterface}) => {
     const classes = useStyles();
     const {todos, updateTodo, removeTodo, markTodoAsDone} = useTodos()
 
@@ -65,7 +65,8 @@ export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
 
     const handleSave = () => {
         if (title !== todo.title && content !== todo.content) {
-            updateTodo(index, {
+            updateTodo(todo.id, {
+                id: todo.id,
                 title: title,
                 content: content,
                 lastModifiedDate: getCurrentDate(),
@@ -85,7 +86,7 @@ export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
                         <>
                             {!todo.isDone &&
                                 <>
-                                    <IconButton aria-label="settings" onClick={() => markTodoAsDone(index)}>
+                                    <IconButton aria-label="settings" onClick={() => markTodoAsDone(todo.id)}>
                                         <DoneIcon />
                                     </IconButton>
                                     <IconButton
@@ -98,7 +99,7 @@ export const Todo = ({todo, index} : {todo: TodoInterface, index: number}) => {
                                     </IconButton>
                                 </>
                             }
-                            <IconButton aria-label="settings" onClick={() => removeTodo(index)}>
+                            <IconButton aria-label="settings" onClick={() => removeTodo(todo.id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </>

@@ -10,6 +10,7 @@ import {FormControl, TextField} from "@material-ui/core";
 import {TodoInterface} from "../interfaces/TodoInterface";
 import useSnackBar from "../hooks/useSnackbar";
 import {getCurrentDate} from "../helpers/utils";
+import {useTodos} from "../context/TodosContext";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children?: React.ReactElement<any, any> },
@@ -18,10 +19,9 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const CreateTodoMW = ({open, onClose, createTodo} :
-                                 {open: boolean, onClose: any, createTodo: any}) => {
+export const CreateTodoMW = ({open, onClose} : {open: boolean, onClose: any}) => {
     const {snack, openSnack} = useSnackBar()
-
+    const {todos, addTodo} = useTodos()
     const [title, setTitle] = useState<string>('')
     const [content, setContent] = useState<string>('')
     const [notificationDate, setNotificationDate] = useState<string>(getCurrentDate())
@@ -30,7 +30,8 @@ export const CreateTodoMW = ({open, onClose, createTodo} :
         if (title === '') {
             openSnack('error', 'Пожалуйста, введите заголовок задачи')
         } else {
-            createTodo({
+            addTodo({
+                id: todos[todos.length - 1].id + 1,
                 title: title,
                 content: content,
                 lastModifiedDate: getCurrentDate(),

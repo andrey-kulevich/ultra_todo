@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import {Button, IconButton} from "@material-ui/core";
+import {Button, IconButton, useMediaQuery} from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import {routes} from "../helpers/routes";
 import AppsIcon from "@material-ui/icons/Apps";
@@ -18,7 +18,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         title: {
             cursor: "pointer",
-            marginRight: theme.spacing(2),
+            marginRight: theme.spacing(0),
+            '@media screen and (min-width: 900px)' : {
+                marginRight: theme.spacing(2)
+            }
         },
         icon: {
             width: 30,
@@ -33,6 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Header() {
     const classes = useStyles();
     const history = useHistory()
+    const matches = useMediaQuery('(min-width:900px)')
     const {display, switchDisplay, setNewTodos} = useTodos()
 
     useEffect(() => {
@@ -56,7 +60,7 @@ export default function Header() {
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" className={classes.title}
+                <Typography variant={matches ? "h6" : "inherit"} className={classes.title}
                             onClick={() => history.push(routes.activeTodos)}>
                     ULTRA TODO
                 </Typography>
@@ -74,13 +78,15 @@ export default function Header() {
                     <Button component="span"> ЗАГРУЗИТЬ </Button>
                 </label>
 
-                <IconButton onClick={() => switchDisplay}>
-                    {display === 'row' ?
-                        <ViewListIcon className={classes.icon}/>
-                        :
-                        <AppsIcon className={classes.icon}/>
-                    }
-                </IconButton>
+                {matches &&
+                    <IconButton onClick={() => switchDisplay}>
+                        {display === 'row' ?
+                            <ViewListIcon className={classes.icon}/>
+                            :
+                            <AppsIcon className={classes.icon}/>
+                        }
+                    </IconButton>
+                }
             </Toolbar>
         </AppBar>
     );

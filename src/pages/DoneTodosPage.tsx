@@ -65,7 +65,7 @@ export const DoneTodosPage = () => {
                         todos.filter(elem => elem.isDone && elem.lastModifiedDate.split('-')[1] ===
                             (new Date().getMonth() + 1).toString().padStart(2, '0')))
                     .map((elem, index) => (
-                        <Todo key={index} todo={elem} index={index}/>
+                        <Todo key={index} todo={elem}/>
                     ))
                 :
                 <Typography variant={"h5"} align={'center'} className={classes.noTodosMessage}>
