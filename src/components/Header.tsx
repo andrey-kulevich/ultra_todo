@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect} from 'react';
+import React, {ChangeEvent} from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -39,21 +39,14 @@ export default function Header() {
     const matches = useMediaQuery('(min-width:900px)')
     const {display, switchDisplay, setNewTodos} = useTodos()
 
-    useEffect(() => {
-
-    },[display])
-
     const getDataFromFile = (event : ChangeEvent<HTMLInputElement>) => {
         let reader = new FileReader()
         // @ts-ignore
         reader.readAsText(event.target.files[0])
         reader.onload = (e) => {
-            if (e.target && e.target.readyState === FileReader.DONE && reader.result) {
+            if (e.target && e.target.readyState === FileReader.DONE && reader.result)
                 setNewTodos(JSON.parse(reader.result as string) as TodoInterface[])
-                localStorage.setItem('todos', reader.result as string)
-            } else {
-                throw new Error('failed to load json data')
-            }
+            else throw new Error('failed to load json data')
         }
     }
 
@@ -79,7 +72,7 @@ export default function Header() {
                 </label>
 
                 {matches &&
-                    <IconButton onClick={() => switchDisplay}>
+                    <IconButton onClick={() => switchDisplay()}>
                         {display === 'row' ?
                             <ViewListIcon className={classes.icon}/>
                             :

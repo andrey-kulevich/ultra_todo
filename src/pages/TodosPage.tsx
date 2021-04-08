@@ -33,13 +33,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const TodosPage = () => {
     const classes = useStyles();
-    const {todos} = useTodos()
+    const {todos, markTodoAsDone, updateTodo, removeTodo} = useTodos()
     const [view, setView] = useState<number>(1)
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
         console.log('alalal')
-    },[todos])
+    },[todos, markTodoAsDone, updateTodo, removeTodo])
 
     return(
         <PageContainer>

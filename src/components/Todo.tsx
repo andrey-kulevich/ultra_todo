@@ -55,8 +55,8 @@ export const Todo = ({todo} : {todo: TodoInterface}) => {
     const [content, setContent] = useState<string>(todo.content)
 
     useEffect(() => {
-
-    },[todos])
+        console.log('nnnnnn')
+    },[todo, todos, updateTodo, removeTodo, markTodoAsDone])
 
     const handleEdit = () => {
         setEdit(true)
@@ -64,7 +64,7 @@ export const Todo = ({todo} : {todo: TodoInterface}) => {
     }
 
     const handleSave = () => {
-        if (title !== todo.title && content !== todo.content) {
+        if (title !== todo.title || content !== todo.content) {
             updateTodo(todo.id, {
                 id: todo.id,
                 title: title,

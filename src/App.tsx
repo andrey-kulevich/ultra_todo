@@ -51,7 +51,7 @@ export default function App() {
         })
 
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
-        oldTodos.splice(todos.findIndex(elem => elem.id === id), 1)
+        oldTodos.splice(oldTodos.findIndex(elem => elem.id === id), 1)
         localStorage.setItem('todos', JSON.stringify(oldTodos))
     }
 
@@ -68,7 +68,7 @@ export default function App() {
         })
 
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
-        oldTodos.splice(todos.findIndex(elem => elem.id === id), 1)
+        oldTodos.splice(oldTodos.findIndex(elem => elem.id === id), 1)
         oldTodos.unshift(todo)
         localStorage.setItem('todos', JSON.stringify(oldTodos))
     }
@@ -80,7 +80,7 @@ export default function App() {
         })
 
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
-        oldTodos[todos.findIndex(elem => elem.id === id)].isDone = true
+        oldTodos[oldTodos.findIndex(elem => elem.id === id)].isDone = true
         localStorage.setItem('todos', JSON.stringify(oldTodos))
     }
 

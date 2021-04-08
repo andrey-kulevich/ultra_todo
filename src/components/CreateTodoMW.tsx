@@ -31,7 +31,7 @@ export const CreateTodoMW = ({open, onClose} : {open: boolean, onClose: any}) =>
             openSnack('error', 'Пожалуйста, введите заголовок задачи')
         } else {
             addTodo({
-                id: todos[todos.length - 1].id + 1,
+                id: Math.max.apply(Math, todos.map((elem) => { return elem.id })) + 1,
                 title: title,
                 content: content,
                 lastModifiedDate: getCurrentDate(),
