@@ -6,8 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import {Button, IconButton, useMediaQuery} from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import {routes} from "../helpers/routes";
-import AppsIcon from "@material-ui/icons/Apps";
-import ViewListIcon from "@material-ui/icons/ViewList";
+import Brightness7Icon from '@material-ui/icons/Brightness7';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
 import {useTodos} from "../context/TodosContext";
 import {TodoInterface} from "../interfaces/TodoInterface";
 
@@ -37,7 +37,7 @@ export default function Header() {
     const classes = useStyles();
     const history = useHistory()
     const matches = useMediaQuery('(min-width:900px)')
-    const {display, switchDisplay, setNewTodos} = useTodos()
+    const {dark, switchTheme, setNewTodos} = useTodos()
 
     const getDataFromFile = (event : ChangeEvent<HTMLInputElement>) => {
         let reader = new FileReader()
@@ -72,11 +72,11 @@ export default function Header() {
                 </label>
 
                 {matches &&
-                    <IconButton onClick={() => switchDisplay()}>
-                        {display === 'row' ?
-                            <ViewListIcon className={classes.icon}/>
+                    <IconButton onClick={() => switchTheme()}>
+                        {dark ?
+                            <Brightness4Icon className={classes.icon}/>
                             :
-                            <AppsIcon className={classes.icon}/>
+                            <Brightness7Icon className={classes.icon}/>
                         }
                     </IconButton>
                 }

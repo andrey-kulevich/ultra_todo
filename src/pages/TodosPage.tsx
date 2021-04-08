@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
         title: {
             marginRight: theme.spacing(3),
             marginTop: theme.spacing(1),
+            backgroundColor: theme.palette.text.primary
         },
         fab: {
             marginRight: theme.spacing(3),

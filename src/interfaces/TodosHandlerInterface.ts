@@ -2,8 +2,8 @@ import {TodoInterface} from "./TodoInterface";
 
 export interface TodosHandlerInterface {
     todos: TodoInterface[],
-    display: string,
-    switchDisplay: Function,
+    dark: boolean,
+    switchTheme: Function,
     addTodo: Function,
     removeTodo: Function,
     setNewTodos: Function,

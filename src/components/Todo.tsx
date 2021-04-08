@@ -15,13 +15,13 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             "&:hover": {
-                backgroundColor: '#f3f3f3',
+                backgroundColor: theme.palette.primary.main,
                 borderRadius: '15px',
                 transition: 'background-color 0.5s, border-radius 0.7s'
             },
             minWidth: 275,
             marginTop: theme.spacing(3),
-            backgroundColor: '#fff',
+            backgroundColor: theme.palette.secondary.main,
             borderRadius: '5px',
             transition: 'background-color 0.5s, border-radius 0.7s'
         },

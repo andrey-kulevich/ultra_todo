@@ -7,32 +7,27 @@ import {ThemeProvider} from '@material-ui/core/styles';
 import {TodosProvider} from "./context/TodosContext";
 import {TodoInterface} from "./interfaces/TodoInterface";
 
-const theme = createMuiTheme({
-    palette: {
-        primary: { main: '#eeeeee' },
-        secondary: { main: '#e57373' },
-        success: { main:'#4791db' }
-    },
-});
-
 export default function App() {
     const routes = useRoutes()
 
-    const [update, setUpdate] = useState<boolean>(true)
     const [todos, setTodos] = useState<TodoInterface[]>([] as TodoInterface[])
-    const [display, setDisplay] = useState<string>('row')
+    const [dark, setDark] = useState<boolean>(false)
+
+    const theme = createMuiTheme({
+        palette: {
+            type: dark ? "dark" : "light",
+            primary: { main: dark ? '#646464' : '#eeeeee' },
+            secondary: { main: dark ? '#6b6b6b' : '#fff' },
+            success: { main:'#4791db' }
+        },
+    })
 
     useEffect(() => {
-        if (localStorage.getItem('todos')) {
+        if (localStorage.getItem('todos'))
             setTodos(JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[])
-        }
-        setUpdate(false)
-    },[update])
+    },[])
 
-    const switchDisplay = () => {
-        if (display === 'row') setDisplay('grid')
-        else setDisplay('row')
-    }
+    const switchTheme = () => { setDark(!dark) }
 
     const addTodo = (todo : TodoInterface) => {
         setTodos((todos) => {
@@ -88,7 +83,7 @@ export default function App() {
         <ThemeProvider theme={theme}>
             <Router>
                 <TodosProvider value={{
-                    todos, display, switchDisplay, addTodo,
+                    todos, dark, switchTheme, addTodo,
                     removeTodo, setNewTodos, updateTodo, markTodoAsDone}}>
                     {routes}
                 </TodosProvider>
