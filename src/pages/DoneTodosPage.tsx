@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
         title: {
             marginRight: theme.spacing(3),
             marginTop: theme.spacing(1),
+            color: theme.palette.text.primary
         },
         noTodosMessage: {
             marginTop: theme.spacing(3),

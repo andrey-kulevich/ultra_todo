@@ -25,9 +25,14 @@ export default function App() {
     useEffect(() => {
         if (localStorage.getItem('todos'))
             setTodos(JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[])
+        if (localStorage.getItem('dark'))
+            setDark(localStorage.getItem('dark') === 'true')
     },[])
 
-    const switchTheme = () => { setDark(!dark) }
+    const switchTheme = () => {
+        localStorage.setItem('dark', dark ? 'false' : 'true')
+        setDark(!dark)
+    }
 
     const addTodo = (todo : TodoInterface) => {
         setTodos((todos) => {
@@ -88,6 +93,6 @@ export default function App() {
                     {routes}
                 </TodosProvider>
           </Router>
-      </ThemeProvider>
+        </ThemeProvider>
   );
 }
