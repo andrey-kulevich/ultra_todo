@@ -1,6 +1,6 @@
 import {PageContainer} from "../containers/PageContainer";
 import {Fab, FormControl, Grid, InputLabel, MenuItem, Select, Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Todo} from "../components/Todo";
 import {useTodos} from "../context/TodosContext";
@@ -34,13 +34,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const TodosPage = () => {
     const classes = useStyles();
-    const {todos, markTodoAsDone, updateTodo, removeTodo} = useTodos()
+    const {todos} = useTodos()
     const [view, setView] = useState<number>(1)
     const [open, setOpen] = useState(false)
-
-    useEffect(() => {
-        console.log('alalal')
-    },[todos, markTodoAsDone, updateTodo, removeTodo])
 
     return(
         <PageContainer>

@@ -10,7 +10,3 @@ export const daysBetween = (firstDate: string, secondDate: string) : number => {
     let days = millisBetween / millisecondsPerDay
     return Math.floor(days)
 }
-
-// export const dateToDayWithMonth = () : string => {
-//
-// }

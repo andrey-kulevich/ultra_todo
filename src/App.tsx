@@ -10,6 +10,7 @@ import {TodoInterface} from "./interfaces/TodoInterface";
 export default function App() {
     const routes = useRoutes()
 
+    const [update, setUpdate] = useState<boolean>(true)
     const [todos, setTodos] = useState<TodoInterface[]>([] as TodoInterface[])
     const [dark, setDark] = useState<boolean>(false)
 
@@ -18,7 +19,8 @@ export default function App() {
             type: dark ? "dark" : "light",
             primary: { main: dark ? '#646464' : '#eeeeee' },
             secondary: { main: dark ? '#6b6b6b' : '#fff' },
-            success: { main:'#4791db' }
+            success: { main: '#4791db' },
+            error: { main: '#fc2727' }
         },
     })
 
@@ -27,7 +29,8 @@ export default function App() {
             setTodos(JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[])
         if (localStorage.getItem('dark'))
             setDark(localStorage.getItem('dark') === 'true')
-    },[])
+        setUpdate(false)
+    },[update])
 
     const switchTheme = () => {
         localStorage.setItem('dark', dark ? 'false' : 'true')
@@ -53,6 +56,7 @@ export default function App() {
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
         oldTodos.splice(oldTodos.findIndex(elem => elem.id === id), 1)
         localStorage.setItem('todos', JSON.stringify(oldTodos))
+        setUpdate(true)
     }
 
     const setNewTodos = (newTodos : TodoInterface[]) => {
@@ -71,6 +75,7 @@ export default function App() {
         oldTodos.splice(oldTodos.findIndex(elem => elem.id === id), 1)
         oldTodos.unshift(todo)
         localStorage.setItem('todos', JSON.stringify(oldTodos))
+        setUpdate(true)
     }
 
     const markTodoAsDone = (id: number) => {
@@ -82,6 +87,7 @@ export default function App() {
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
         oldTodos[oldTodos.findIndex(elem => elem.id === id)].isDone = true
         localStorage.setItem('todos', JSON.stringify(oldTodos))
+        setUpdate(true)
     }
 
     return (

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -47,16 +47,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const Todo = ({todo} : {todo: TodoInterface}) => {
     const classes = useStyles();
-    const {todos, updateTodo, removeTodo, markTodoAsDone} = useTodos()
+    const {updateTodo, removeTodo, markTodoAsDone} = useTodos()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [edit, setEdit] = useState<boolean>(false)
     const [title, setTitle] = useState<string>(todo.title)
     const [content, setContent] = useState<string>(todo.content)
-
-    useEffect(() => {
-        console.log('nnnnnn')
-    },[todo, todos, updateTodo, removeTodo, markTodoAsDone])
 
     const handleEdit = () => {
         setEdit(true)
