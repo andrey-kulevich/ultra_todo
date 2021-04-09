@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Line} from 'react-chartjs-2';
+import {Bar} from 'react-chartjs-2';
 import {Paper} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {useTodos} from "../context/TodosContext";
-
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         chartPaper: {
             marginTop: theme.spacing(3),
             padding: theme.spacing(2),
-            maxHeight: 550,
+            maxHeight: 300,
             minHeight: 40
         }
     }),
@@ -21,21 +20,37 @@ export const TodosStatisticChart = () => {
     const classes = useStyles()
     const {todos} = useTodos()
 
-    const [chartLabels, setChartLabels] = useState<string[]>([])
-    const [data, setData] = useState<number[]>([])
+    const [reducedData, setReducedData] = useState<{ label: string; done: number; }[]>([])
 
     useEffect(() => {
-        setChartLabels(createLabels())
+        setReducedData(createChartData())
     },[todos])
 
-    const createLabels = () => {
-        let months = ['January','February','March','April','May','June',
-            'July','August','September','October','November','December']
-        let temp: string[] = []
-        todos.forEach((elem) => {
-            temp.push(months[parseInt(elem.lastModifiedDate.split('-')[1])])
+    const createChartData = () => {
+        let tempTodos: { label: string; done: number; }[] = []
+        todos.forEach(elem => {
+            tempTodos.push({
+                label: elem.lastModifiedDate.slice(0, 7),
+                done: elem.isDone ? 1 : 0
+            })
         })
-        return temp
+
+        let result: { label: string; done: number; }[] = []
+
+        tempTodos.reduce(function(res, value) {
+            // @ts-ignore
+            if ( !res[value.label]) {
+                // @ts-ignore
+                res[value.label] = { label: value.label, done: 0 }
+                // @ts-ignore
+                result.push(res[value.label])
+            }
+            // @ts-ignore
+            res[value.label].done += value.done
+            return res
+        }, {})
+
+        return result
     }
 
     const options = {
@@ -49,7 +64,7 @@ export const TodosStatisticChart = () => {
     }
 
     const chartData = {
-        labels: chartLabels,
+        labels: reducedData.map(elem => elem.label),
         datasets: [
             {
                 label: 'Статистика выполнения задач',
@@ -68,18 +83,14 @@ export const TodosStatisticChart = () => {
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: data
+                data: reducedData.map(elem => elem.done)
             }
         ]
     }
 
-    useEffect(() => {
-
-    },[])
-
     return (
         <Paper elevation={3} className={classes.chartPaper}>
-            <Line data={chartData} options={options} height={120}/>
+            <Bar data={chartData} options={options} height={75}/>
         </Paper>
     )
 }

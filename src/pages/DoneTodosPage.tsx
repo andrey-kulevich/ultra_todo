@@ -5,6 +5,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Todo} from "../components/Todo";
 import {useTodos} from "../context/TodosContext";
 import {daysBetween, getCurrentDate} from "../helpers/utils";
+import {TodosStatisticChart} from "../components/TodosStatisticChart";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -57,6 +58,7 @@ export const DoneTodosPage = () => {
                     </Select>
                 </FormControl>
             </Grid>
+            <TodosStatisticChart/>
             {todos.length > 0 ?
                 (view === 1 ? todos.filter(elem => elem.isDone)
                     :
