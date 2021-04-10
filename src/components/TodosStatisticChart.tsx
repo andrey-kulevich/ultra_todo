@@ -48,7 +48,7 @@ export const TodosStatisticChart = () => {
             return res
         }, {})
 
-        return result
+        return result.reverse()
     }
 
     const options = {

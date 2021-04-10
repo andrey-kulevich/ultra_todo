@@ -27,12 +27,13 @@ const useStyles = makeStyles((theme: Theme) =>
             "&:hover": {
                 backgroundColor: theme.palette.primary.main,
                 borderRadius: '15px',
-                transition: 'background-color 0.5s, border-radius 0.7s'
+                transition: 'background-color 0.5s, border-radius 0.7s, box-shadow 0.7s',
+                boxShadow: '0 0 7px rgba(0,0,0,0.2)',
             },
             minWidth: 275,
             marginTop: theme.spacing(3),
             borderRadius: '5px',
-            transition: 'background-color 0.5s, border-radius 0.7s'
+            transition: 'background-color 0.5s, border-radius 0.7s, box-shadow 0.7s'
         },
         veryUrgentColor: {
             backgroundColor: 'rgba(255,83,83,0.2)',
