@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         noTodosMessage: {
             marginTop: theme.spacing(3),
+            color: theme.palette.text.primary
         },
         fab: {
             marginRight: theme.spacing(3),
