@@ -9,8 +9,7 @@ const useStyles = makeStyles((theme: Theme) =>
         chartPaper: {
             marginTop: theme.spacing(3),
             padding: theme.spacing(2),
-            maxHeight: 300,
-            minHeight: 100
+            minHeight: 300
         }
     }),
 );
@@ -19,7 +18,6 @@ export const TodosStatisticChart = () => {
 
     const classes = useStyles()
     const {todos} = useTodos()
-
     const [reducedData, setReducedData] = useState<{ label: string; done: number; }[]>([])
 
     useEffect(() => {
@@ -54,6 +52,8 @@ export const TodosStatisticChart = () => {
     }
 
     const options = {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
             yAxes: [{
                 ticks: {
@@ -90,7 +90,7 @@ export const TodosStatisticChart = () => {
 
     return (
         <Paper elevation={3} className={classes.chartPaper}>
-            <Bar data={chartData} options={options} height={75}/>
+            <Bar data={chartData} options={options}/>
         </Paper>
     )
 }
