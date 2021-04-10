@@ -1,12 +1,13 @@
 import {PageContainer} from "../containers/PageContainer";
 import {Fab, FormControl, Grid, InputLabel, MenuItem, Select, Typography} from "@material-ui/core";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Todo} from "../components/Todo";
 import {useTodos} from "../context/TodosContext";
 import AddIcon from '@material-ui/icons/Add';
 import {CreateTodoMW} from "../components/CreateTodoMW";
 import {daysBetween, getCurrentDate} from "../helpers/utils";
+import {TodoInterface} from "../interfaces/TodoInterface";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,6 +38,15 @@ export const TodosPage = () => {
     const {todos} = useTodos()
     const [view, setView] = useState<number>(1)
     const [open, setOpen] = useState(false)
+    const [filteredTodos, setFilteredTodos] = useState<TodoInterface[]>([])
+
+    useEffect(() => {
+        setFilteredTodos(view === 1 ? todos.filter(elem => !elem.isDone) :
+            view === 2 ? todos.filter(elem => !elem.isDone &&
+                daysBetween(elem.lastModifiedDate, getCurrentDate()) < 7) :
+                todos.filter(elem => !elem.isDone && elem.lastModifiedDate.split('-')[1] ===
+                    (new Date().getMonth() + 1).toString().padStart(2, '0')))
+    }, [view, todos])
 
     return(
         <PageContainer>
@@ -64,17 +74,10 @@ export const TodosPage = () => {
                     </Select>
                 </FormControl>
             </Grid>
-            {todos.length > 0 ?
-                (view === 1 ? todos.filter(elem => !elem.isDone)
-                    :
-                    view === 2 ? todos.filter(elem => !elem.isDone &&
-                        daysBetween(elem.lastModifiedDate, getCurrentDate()) < 7)
-                        :
-                        todos.filter(elem => !elem.isDone && elem.lastModifiedDate.split('-')[1] ===
-                            (new Date().getMonth() + 1).toString().padStart(2, '0')))
-                    .map((elem, index) => (
+            {filteredTodos.length > 0 ?
+                filteredTodos.map((elem, index) => (
                         <Todo key={index} todo={elem}/>
-                    ))
+                ))
                 :
                 <Typography variant={"h5"} align={'center'} className={classes.noTodosMessage}>
                     Не сиди без дела, добавь задачи!

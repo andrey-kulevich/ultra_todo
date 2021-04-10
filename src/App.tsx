@@ -45,6 +45,7 @@ export default function App() {
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
         oldTodos.unshift(todo)
         localStorage.setItem('todos', JSON.stringify(oldTodos))
+        setUpdate(true)
     }
 
     const removeTodo = (id : number) => {
@@ -94,8 +95,7 @@ export default function App() {
         <ThemeProvider theme={theme}>
             <Router>
                 <TodosProvider value={{
-                    todos, dark, switchTheme, addTodo,
-                    removeTodo, setNewTodos, updateTodo, markTodoAsDone}}>
+                    todos, dark, switchTheme, addTodo, removeTodo, setNewTodos, updateTodo, markTodoAsDone}}>
                     {routes}
                 </TodosProvider>
           </Router>

@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(3),
             padding: theme.spacing(2),
             maxHeight: 300,
-            minHeight: 40
+            minHeight: 100
         }
     }),
 );
