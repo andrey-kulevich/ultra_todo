@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {BrowserRouter as Router} from "react-router-dom"
+import {HashRouter as Router} from "react-router-dom"
 import {useRoutes} from "./hooks/useRoutes";
 import {createMuiTheme} from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles';
