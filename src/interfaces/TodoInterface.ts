@@ -3,6 +3,6 @@ export interface TodoInterface {
     title: string,
     content: string,
     lastModifiedDate: string,
-    notificationDate: string,
+    urgency: 'very urgent' | 'urgently' | 'medium urgency' | 'do not rush',
     isDone: boolean
 }

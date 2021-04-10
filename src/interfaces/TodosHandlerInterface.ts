@@ -8,5 +8,6 @@ export interface TodosHandlerInterface {
     removeTodo: Function,
     setNewTodos: Function,
     updateTodo: Function,
-    markTodoAsDone: Function
+    markTodoAsDone: Function,
+    switchTodoUrgency: Function
 }

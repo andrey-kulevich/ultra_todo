@@ -17,8 +17,8 @@ export default function App() {
     const theme = createMuiTheme({
         palette: {
             type: dark ? "dark" : "light",
-            primary: { main: dark ? '#474747' : '#eeeeee' },
-            secondary: { main: dark ? '#4e4e4e' : '#fff' },
+            primary: { main: dark ? '#424242' : '#eeeeee' },
+            secondary: { main: dark ? '#4d4d4d' : '#fff' },
             success: { main: '#4791db' },
             error: { main: '#fc2727' }
         },
@@ -43,7 +43,8 @@ export default function App() {
             return todos
         })
         let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
-        oldTodos.unshift(todo)
+        if (oldTodos) oldTodos.unshift(todo)
+        else oldTodos = [todo]
         localStorage.setItem('todos', JSON.stringify(oldTodos))
         setUpdate(true)
     }
@@ -91,11 +92,25 @@ export default function App() {
         setUpdate(true)
     }
 
+    const switchTodoUrgency = (id: number, value: 'very urgent' | 'urgently' | 'medium urgency' | 'do not rush') => {
+        setTodos((todos) => {
+            todos[todos.findIndex(elem => elem.id === id)].urgency = value
+            return todos
+        })
+
+        let oldTodos = JSON.parse(localStorage.getItem('todos') as string) as TodoInterface[]
+        oldTodos[oldTodos.findIndex(elem => elem.id === id)].urgency = value
+        localStorage.setItem('todos', JSON.stringify(oldTodos))
+        setUpdate(true)
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <Router>
                 <TodosProvider value={{
-                    todos, dark, switchTheme, addTodo, removeTodo, setNewTodos, updateTodo, markTodoAsDone}}>
+                    todos, dark,
+                    switchTheme, addTodo, removeTodo, setNewTodos,
+                    updateTodo, markTodoAsDone, switchTodoUrgency}}>
                     {routes}
                 </TodosProvider>
           </Router>

@@ -3,7 +3,17 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import {CardActions, CardHeader, IconButton, Menu, MenuItem, Button, TextField} from "@material-ui/core";
+import {
+    CardActions,
+    CardHeader,
+    IconButton,
+    Menu,
+    MenuItem,
+    Button,
+    TextField,
+    Collapse,
+    List, ListItem
+} from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
@@ -21,9 +31,20 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             minWidth: 275,
             marginTop: theme.spacing(3),
-            backgroundColor: theme.palette.secondary.main,
             borderRadius: '5px',
             transition: 'background-color 0.5s, border-radius 0.7s'
+        },
+        veryUrgentColor: {
+            backgroundColor: 'rgba(255,83,83,0.2)',
+        },
+        urgentlyColor: {
+            backgroundColor: 'rgba(255,161,28,0.2)',
+        },
+        mediumUrgencyColor: {
+            backgroundColor: 'rgba(255,245,60,0.2)',
+        },
+        doNotRushColor: {
+            backgroundColor: theme.palette.secondary.main,
         },
         title: {
             fontSize: 14,
@@ -41,21 +62,32 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         header: {
             paddingBottom: 0
+        },
+        listPadding: {
+            paddingLeft: 0,
+            paddingTop: 0,
+            paddingBottom: 0
         }
     })
 );
 
 export const Todo = ({todo} : {todo: TodoInterface}) => {
     const classes = useStyles();
-    const {updateTodo, removeTodo, markTodoAsDone} = useTodos()
+    const {updateTodo, removeTodo, markTodoAsDone, switchTodoUrgency} = useTodos()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [edit, setEdit] = useState<boolean>(false)
     const [title, setTitle] = useState<string>(todo.title)
     const [content, setContent] = useState<string>(todo.content)
+    const [openCollapse, setOpenCollapse] = useState(false)
 
     const handleEdit = () => {
         setEdit(true)
+        setAnchorEl(null)
+    }
+
+    const handleSwitchUrgency = (value: 'very urgent' | 'urgently' | 'medium urgency' | 'do not rush') => {
+        switchTodoUrgency(todo.id, value)
         setAnchorEl(null)
     }
 
@@ -66,16 +98,31 @@ export const Todo = ({todo} : {todo: TodoInterface}) => {
                 title: title,
                 content: content,
                 lastModifiedDate: getCurrentDate(),
-                notificationDate: todo.notificationDate,
+                urgency: todo.urgency,
                 isDone: false
             } as TodoInterface)
         }
         setEdit(false)
     }
 
+    const defineCardColor = () : string => {
+        if (!todo.isDone) {
+            switch (todo.urgency) {
+                case "very urgent":
+                    return classes.veryUrgentColor;
+                case "urgently":
+                    return classes.urgentlyColor;
+                case "medium urgency":
+                    return classes.mediumUrgencyColor;
+                default:
+                    return classes.doNotRushColor;
+            }
+        } else return classes.doNotRushColor;
+    }
+
     return (
         <>
-            <Card className={classes.root} variant="outlined" draggable={"true"}>
+            <Card className={classes.root + ' ' + defineCardColor()} variant="outlined">
                 <CardHeader
                     className={classes.header}
                     action={
@@ -148,10 +195,36 @@ export const Todo = ({todo} : {todo: TodoInterface}) => {
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
+                onClose={() => {
+                    setAnchorEl(null)
+                    setOpenCollapse(false)
+                }}
             >
                 <MenuItem onClick={handleEdit}>Изменить</MenuItem>
-                <MenuItem onClick={() => setAnchorEl(null)}>Цвет</MenuItem>
+                <MenuItem>
+                    <List className={classes.listPadding}>
+                        <ListItem className={classes.listPadding} onClick={() => setOpenCollapse(true)}>
+                            Срочность
+                        </ListItem>
+                        <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                                <ListItem button onClick={() => handleSwitchUrgency('very urgent')}>
+                                    Очень срочно
+                                </ListItem>
+                                <ListItem button onClick={() => handleSwitchUrgency('urgently')}>
+                                    Срочно
+                                </ListItem>
+                                <ListItem button onClick={() => handleSwitchUrgency('medium urgency')}>
+                                    Средняя срочность
+                                </ListItem>
+                                <ListItem button onClick={() => handleSwitchUrgency('do not rush')}>
+                                    Не срочно
+                                </ListItem>
+                            </List>
+                        </Collapse>
+                    </List>
+
+                </MenuItem>
             </Menu>
         </>
     );

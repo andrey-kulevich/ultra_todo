@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
-import {FormControl, TextField} from "@material-ui/core";
+import {FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {TodoInterface} from "../interfaces/TodoInterface";
 import useSnackBar from "../hooks/useSnackbar";
 import {getCurrentDate} from "../helpers/utils";
@@ -24,7 +24,7 @@ export const CreateTodoMW = ({open, onClose} : {open: boolean, onClose: any}) =>
     const {todos, addTodo} = useTodos()
     const [title, setTitle] = useState<string>('')
     const [content, setContent] = useState<string>('')
-    const [notificationDate, setNotificationDate] = useState<string>(getCurrentDate())
+    const [urgency, setUrgency] = useState<string>('do not rush')
 
     const handleCreate = () => {
         if (title === '') {
@@ -35,7 +35,7 @@ export const CreateTodoMW = ({open, onClose} : {open: boolean, onClose: any}) =>
                 title: title,
                 content: content,
                 lastModifiedDate: getCurrentDate(),
-                notificationDate: notificationDate,
+                urgency: urgency,
                 isDone: false
             } as TodoInterface)
             onClose()
@@ -73,16 +73,20 @@ export const CreateTodoMW = ({open, onClose} : {open: boolean, onClose: any}) =>
                         onChange={(e) =>
                             setContent(e.target.value)}
                     />
-                    <TextField
-                        autoFocus
-                        fullWidth
-                        id="contentField"
-                        label="Дедлайн"
-                        type="date"
-                        defaultValue={notificationDate}
-                        onChange={(e) =>
-                            setNotificationDate(e.target.value as string)}
-                    />
+                    <FormControl fullWidth>
+                        <InputLabel id="selectPeriodLabel">Срочность задачи</InputLabel>
+                        <Select
+                            labelId="selectPeriodLabel"
+                            id="selectPeriod"
+                            value={urgency}
+                            onChange={(e) => setUrgency(e.target.value as string)}
+                        >
+                            <MenuItem value={'very urgent'}>Очень срочно</MenuItem>
+                            <MenuItem value={'urgently'}>Срочно</MenuItem>
+                            <MenuItem value={'medium urgency'}>Средняя срочность</MenuItem>
+                            <MenuItem value={'do not rush'}>Не срочно</MenuItem>
+                        </Select>
+                    </FormControl>
                 </FormControl>
             </DialogContent>
             <DialogActions>
