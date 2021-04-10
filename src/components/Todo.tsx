@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,7 +12,7 @@ import {
     Button,
     TextField,
     Collapse,
-    List, ListItem
+    List, ListItem, Tooltip
 } from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -81,6 +81,11 @@ export const Todo = ({todo} : {todo: TodoInterface}) => {
     const [content, setContent] = useState<string>(todo.content)
     const [openCollapse, setOpenCollapse] = useState(false)
 
+    useEffect(() => {
+        setTitle(todo.title)
+        setContent(todo.content)
+    }, [todo])
+
     const handleEdit = () => {
         setEdit(true)
         setAnchorEl(null)
@@ -129,9 +134,11 @@ export const Todo = ({todo} : {todo: TodoInterface}) => {
                         <>
                             {!todo.isDone &&
                                 <>
-                                    <IconButton aria-label="settings" onClick={() => markTodoAsDone(todo.id)}>
-                                        <DoneIcon />
-                                    </IconButton>
+                                    <Tooltip title={'Пометить как выполненную'}>
+                                        <IconButton aria-label="settings" onClick={() => markTodoAsDone(todo.id)}>
+                                            <DoneIcon />
+                                        </IconButton>
+                                    </Tooltip>
                                     <IconButton
                                         aria-label="settings"
                                         aria-controls="settings-menu"
