@@ -17,8 +17,8 @@ export default function App() {
     const theme = createMuiTheme({
         palette: {
             type: dark ? "dark" : "light",
-            primary: { main: dark ? '#646464' : '#eeeeee' },
-            secondary: { main: dark ? '#6b6b6b' : '#fff' },
+            primary: { main: dark ? '#474747' : '#eeeeee' },
+            secondary: { main: dark ? '#4e4e4e' : '#fff' },
             success: { main: '#4791db' },
             error: { main: '#fc2727' }
         },

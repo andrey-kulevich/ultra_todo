@@ -3,11 +3,14 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import {Button, IconButton, useMediaQuery} from "@material-ui/core";
+import {Button, IconButton, useMediaQuery, Tooltip} from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import {routes} from "../helpers/routes";
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import {useTodos} from "../context/TodosContext";
 import {TodoInterface} from "../interfaces/TodoInterface";
 
@@ -41,24 +44,29 @@ export default function Header() {
 
     const getDataFromFile = (event : ChangeEvent<HTMLInputElement>) => {
         let reader = new FileReader()
-        // @ts-ignore
-        reader.readAsText(event.target.files[0])
-        reader.onload = (e) => {
-            if (e.target && e.target.readyState === FileReader.DONE && reader.result)
-                setNewTodos(JSON.parse(reader.result as string) as TodoInterface[])
-            else throw new Error('failed to load json data')
+        if (event.target.files) {
+            reader.readAsText(event.target.files[0])
+            reader.onload = (e) => {
+                if (e.target && e.target.readyState === FileReader.DONE && reader.result)
+                    setNewTodos(JSON.parse(reader.result as string) as TodoInterface[])
+                else throw new Error('failed to load json data')
+            }
         }
     }
 
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant={matches ? "h6" : "inherit"} className={classes.title}
+                <Typography variant={'h6'} className={classes.title}
                             onClick={() => history.push(routes.activeTodos)}>
                     ULTRA TODO
                 </Typography>
-                <Button onClick={() => history.push(routes.activeTodos)}> АКТИВНЫЕ </Button>
-                <Button onClick={() => history.push(routes.doneTodos)}> ГОТОВЫЕ </Button>
+                <Button onClick={() => history.push(routes.activeTodos)}>
+                    {matches ? 'АКТИВНЫЕ' : <FormatListBulletedIcon className={classes.icon}/>}
+                </Button>
+                <Button onClick={() => history.push(routes.doneTodos)}>
+                    {matches ? 'ЗАВЕРШЕННЫЕ' : <PlaylistAddCheckIcon className={classes.icon}/>}
+                </Button>
 
                 <input
                     accept="application/json"
@@ -68,10 +76,12 @@ export default function Header() {
                     type="file"
                 />
                 <label htmlFor="button-file">
-                    <Button component="span"> ЗАГРУЗИТЬ </Button>
+                    <Button component="span">
+                        {matches ? 'ЗАГРУЗИТЬ' : <FolderOpenIcon className={classes.icon}/>}
+                    </Button>
                 </label>
 
-                {matches &&
+                <Tooltip title={'Сменить тему'}>
                     <IconButton onClick={() => switchTheme()}>
                         {dark ?
                             <Brightness4Icon className={classes.icon}/>
@@ -79,7 +89,7 @@ export default function Header() {
                             <Brightness7Icon className={classes.icon}/>
                         }
                     </IconButton>
-                }
+                </Tooltip>
             </Toolbar>
         </AppBar>
     );
